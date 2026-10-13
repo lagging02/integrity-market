@@ -1,0 +1,27 @@
+# OS Junk Files
+.DS_Store
+Thumbs.db
+*.tmp
+*~
+
+# IDE & Editor Files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment & Credentials
+.env
+.env.local
+*.key
+*.pem
+*.crt
+
+# Logs & Cache
+*.log
+logs/
+cache/
+
+# Vendor & Dependencies
+vendor/
+node_modules/

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 40" width="140" height="40">
+  <rect width="140" height="40" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <g transform="translate(10, 6)">
+    <path d="M6 3h5.5l5.5 17h-4.5l-3.5-12-3.5 12H1L6 3z" fill="#005baa"/>
+    <path d="M19 3h7c4.5 0 7.5 2.2 7.5 5.5s-3 5.5-7.5 5.5h-3.2V20H19V3zm3.8 3.5v4.5h3.2c2.2 0 3.7-.8 3.7-2.2 0-1.5-1.5-2.3-3.7-2.3h-3.2z" fill="#ed1c24"/>
+    <text x="36" y="19" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="16" fill="#005baa" letter-spacing="-0.5">VN</text>
+    <text x="63" y="19" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="16" fill="#ed1c24" letter-spacing="-0.5">PAY</text>
+    <rect x="98" y="5" width="22" height="17" rx="3" fill="#005baa"/>
+    <text x="101" y="17" font-family="system-ui, sans-serif" font-weight="bold" font-size="9" fill="#ffffff">QR</text>
+  </g>
+</svg>

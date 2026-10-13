@@ -1,0 +1,68 @@
+# ==============================================================================
+# BẢO MẬT & ĐIỀU HƯỚNG MÁY CHỦ WEB (APACHE .HTACCESS) - ATTMDT 2026
+# ==============================================================================
+
+# 1. Tắt hiển thị danh mục thư mục (Directory Browsing)
+Options -Indexes -MultiViews
+
+# 2. Ẩn thông tin định danh phiên bản máy chủ và backend PHP
+ServerSignature Off
+
+# 3. Chặn tải trực tiếp các tệp tin cấu hình, sao lưu, script và cơ sở dữ liệu
+<FilesMatch "\.(sql|sh|env|ini|log|bak|config|swp|git.*)$">
+    Require all denied
+</FilesMatch>
+
+# 4. Thiết lập Security Headers & Chống SSL Strip, Clickjacking, Sniffing, Cookie Theft
+<IfModule mod_headers.c>
+    # HSTS: Chống SSL Striping, buộc trình duyệt dùng HTTPS trong 1 năm
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+    # Chống MIME-type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Chống Clickjacking
+    Header always set X-Frame-Options "SAMEORIGIN"
+
+    # Chống XSS Reflected
+    Header always set X-XSS-Protection "1; mode=block"
+
+    # Giới hạn rò rỉ URL trong Referer
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Giới hạn quyền thiết bị phần cứng
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+
+    # Tự động gán cờ Secure và SameSite=Lax cho tất cả Set-Cookie (Chống trộm Session / Burp Suite)
+    Header always edit Set-Cookie ^(.*)$ "$1; Secure; SameSite=Lax"
+
+    # Ẩn hoàn toàn chữ ký công nghệ Backend (PHP / Apache fingerprinting / Load Balancer)
+    Header unset X-Powered-By
+    Header always unset X-Powered-By
+    Header unset Server
+    Header always unset Server
+    Header unset X-Backend-Server
+    Header always unset X-Backend-Server
+    Header unset X-Load-Balancer
+    Header always unset X-Load-Balancer
+</IfModule>
+
+# 5. Cơ chế Pretty URLs: Giấu hoàn toàn đuôi .php và tham số URL
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Giấu kín hoàn toàn admin.php (trả về 404 cho kẻ tấn công)
+    RewriteRule ^admin\.php$ index.php?page=404 [L]
+
+    # Chặn truy cập trực tiếp thư mục nội bộ
+    RewriteRule ^(config|app)/ - [F,L]
+
+    # Nếu file hoặc thư mục vật lý tồn tại (ảnh SVG, css, js), phục vụ trực tiếp
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Điều hướng URL sạch (Pretty URLs): /checkout, /admin, /login, /register, /order-tracking
+    RewriteRule ^([a-zA-Z0-9_\-]+)/?$ index.php?page=$1 [L,QSA]
+</IfModule>

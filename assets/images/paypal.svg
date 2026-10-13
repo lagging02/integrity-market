@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 40" width="140" height="40">
+  <rect width="140" height="40" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <g transform="translate(14, 8)">
+    <path d="M5 2h6.5c3.2 0 5.5 1.6 5 4.8-.4 2.5-2.4 4.4-5.3 4.4H8.2L6.5 21H3L5 2z" fill="#003087"/>
+    <path d="M9.5 6.5h6.5c3.2 0 5.5 1.6 5 4.8-.4 2.5-2.4 4.4-5.3 4.4H12.7L11 25.5H7.5L9.5 6.5z" fill="#0079c1"/>
+    <text x="32" y="18" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="16" fill="#003087" letter-spacing="-0.5">Pay<tspan fill="#0079c1">Pal</tspan></text>
+  </g>
+</svg>
