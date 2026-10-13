@@ -66,18 +66,22 @@ if (!empty($currentUser['id'])) {
                             <input type="tel" name="phone" class="form-control" value="<?= htmlspecialchars($defaultPhone) ?>" placeholder="0901234567" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold">Đơn Vị 3PL Vận Chuyển</label>
-                            <select name="shipping_carrier" class="form-select" id="carrierSelect" onchange="updateShipping(this)">
-                                <option value="GHN Express - Tiêu Chuẩn" data-fee="28000" selected>GHN Express - Tiêu Chuẩn (28.000 đ)</option>
-                                <option value="GHN Express - Nội Thành TP.HCM" data-fee="22000">GHN Express - Nội Thành TP.HCM (22.000 đ)</option>
+                            <label class="form-label small fw-bold">Đơn Vị 3PL Vận Chuyển <span class="text-danger">*</span></label>
+                            <select name="shipping_carrier" class="form-select shadow-sm" id="carrierSelect" onchange="updateShipping(this)">
+                                <option value="GHN Express - Tiêu Chuẩn" data-fee="28000" data-time="2 - 3 ngày" selected>GHN Express - Tiêu Chuẩn (28.000 đ)</option>
+                                <option value="GHN Express - Hỏa Tốc" data-fee="22000" data-time="Trong 24 giờ">GHN Express - Hỏa Tốc (22.000 đ)</option>
+                                <option value="GHN Tiết Kiệm" data-fee="18000" data-time="3 - 5 ngày">GHN Tiết Kiệm (18.000 đ)</option>
                             </select>
+                            <div class="form-text small text-primary fw-semibold mt-1" id="deliveryEstimate">
+                                <i class="bi bi-clock-history me-1"></i>Thời gian dự kiến: <strong>2 - 3 ngày</strong> (Kho Tổng TP.HCM)
+                            </div>
                         </div>
                     </div>
 
-                    <div class="alert alert-light border small text-muted d-flex align-items-center gap-2 mb-3 p-2">
+                    <div class="alert alert-light border small text-muted d-flex align-items-center gap-2 mb-3 p-2 rounded-3">
                         <i class="bi bi-geo-alt-fill text-danger fs-5"></i>
                         <div>
-                            <strong>Bưu cục xuất hàng:</strong> Kho Tổng TP. Hồ Chí Minh (GHN Shop #6723370). Hỗ trợ chính sách <strong>Đồng kiểm</strong> khi nhận hàng.
+                            <strong>Bưu cục xuất kho:</strong> Kho Tổng TP. Hồ Chí Minh (GHN Shop #6723370). Hỗ trợ chính sách <strong>Đồng kiểm hàng</strong> khi nhận.
                         </div>
                     </div>
 
@@ -89,16 +93,24 @@ if (!empty($currentUser['id'])) {
 
                 <!-- 2. PHƯƠNG THỨC THANH TOÁN -->
                 <div class="card border rounded-3 bg-white shadow-sm p-4 mb-4">
-                    <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
-                        <i class="bi bi-credit-card-2-front-fill text-primary"></i> 2. Phương Thức Thanh Toán
-                    </h5>
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h5 class="fw-bold mb-0 d-flex align-items-center gap-2">
+                            <i class="bi bi-credit-card-2-front-fill text-primary"></i> 2. Phương Thức Thanh Toán
+                        </h5>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 small">
+                            <i class="bi bi-shield-lock-fill me-1"></i>PCI-DSS Secure
+                        </span>
+                    </div>
 
-                    <div class="d-flex flex-column gap-2">
+                    <div class="d-flex flex-column gap-2 mb-3">
                         <!-- VNPAY -->
-                        <label class="border rounded-3 p-3 bg-white d-flex align-items-center gap-3 shadow-sm" for="pay_vnpay" style="cursor: pointer; transition: all 0.2s;">
+                        <label class="border rounded-3 p-3 bg-white d-flex align-items-center gap-3 shadow-sm position-relative" for="pay_vnpay" style="cursor: pointer; transition: all 0.2s;">
                             <input class="form-check-input mt-0 fs-5" type="radio" name="payment_method" id="pay_vnpay" value="VNPAY" checked>
                             <img src="assets/images/vnpay.png" alt="VNPAY" style="height: 38px; width: 100px; object-fit: contain;">
-                            <span class="fw-bold text-dark fs-6">Cổng VNPAY (ATM / VNPAY-QR / Visa)</span>
+                            <div>
+                                <span class="fw-bold text-dark fs-6 d-block">Cổng VNPAY (ATM / VNPAY-QR / Visa)</span>
+                                <span class="small text-muted">Thanh toán tức thì qua Sandbox VNPAY</span>
+                            </div>
                             <span class="badge bg-danger ms-auto">Khuyên dùng</span>
                         </label>
 
@@ -106,30 +118,54 @@ if (!empty($currentUser['id'])) {
                         <label class="border rounded-3 p-3 bg-white d-flex align-items-center gap-3 shadow-sm" for="pay_zalopay" style="cursor: pointer; transition: all 0.2s;">
                             <input class="form-check-input mt-0 fs-5" type="radio" name="payment_method" id="pay_zalopay" value="ZALOPAY">
                             <img src="assets/images/zalopay.png" alt="ZaloPay" style="height: 38px; width: 100px; object-fit: contain;">
-                            <span class="fw-bold text-dark fs-6">Ví Điện Tử ZaloPay</span>
+                            <div>
+                                <span class="fw-bold text-dark fs-6 d-block">Ví Điện Tử ZaloPay</span>
+                                <span class="small text-muted">Quét mã QR ZaloPay / VietQR động</span>
+                            </div>
                         </label>
 
                         <!-- MOMO -->
                         <label class="border rounded-3 p-3 bg-white d-flex align-items-center gap-3 shadow-sm" for="pay_momo" style="cursor: pointer; transition: all 0.2s;">
                             <input class="form-check-input mt-0 fs-5" type="radio" name="payment_method" id="pay_momo" value="MOMO">
                             <img src="assets/images/momo.svg" alt="MoMo" style="height: 38px; width: 100px; object-fit: contain;">
-                            <span class="fw-bold text-dark fs-6">Ví Điện Tử MoMo</span>
+                            <div>
+                                <span class="fw-bold text-dark fs-6 d-block">Ví Điện Tử MoMo</span>
+                                <span class="small text-muted">Cổng thanh toán MoMo Sandbox All-in-One</span>
+                            </div>
                         </label>
 
                         <!-- PAYPAL -->
                         <label class="border rounded-3 p-3 bg-white d-flex align-items-center gap-3 shadow-sm" for="pay_paypal" style="cursor: pointer; transition: all 0.2s;">
                             <input class="form-check-input mt-0 fs-5" type="radio" name="payment_method" id="pay_paypal" value="PAYPAL">
                             <img src="assets/images/paypal.png" alt="PayPal" style="height: 38px; width: 100px; object-fit: contain;">
-                            <span class="fw-bold text-dark fs-6">Cổng Quốc Tế PayPal</span>
+                            <div>
+                                <span class="fw-bold text-dark fs-6 d-block">Cổng Quốc Tế PayPal</span>
+                                <span class="small text-muted">Thanh toán thẻ quốc tế / Tài khoản PayPal USD</span>
+                            </div>
                         </label>
 
                         <!-- COD -->
                         <label class="border rounded-3 p-3 bg-white d-flex align-items-center gap-3 shadow-sm" for="pay_cod" style="cursor: pointer; transition: all 0.2s;">
                             <input class="form-check-input mt-0 fs-5" type="radio" name="payment_method" id="pay_cod" value="COD">
                             <img src="assets/images/cod.svg" alt="COD" style="height: 38px; width: 100px; object-fit: contain;">
-                            <span class="fw-bold text-dark fs-6">Thanh Toán Khi Nhận Hàng (COD)</span>
+                            <div>
+                                <span class="fw-bold text-dark fs-6 d-block">Thanh Toán Khi Nhận Hàng (COD)</span>
+                                <span class="small text-muted">Trả tiền mặt cho bưu tá GHN khi nhận bưu kiện</span>
+                            </div>
                             <span class="badge bg-secondary ms-auto">Đồng Kiểm 3PL</span>
                         </label>
+                    </div>
+
+                    <!-- KHỐI HƯỚNG DẪN TEST THANH TOÁN SANDBOX -->
+                    <div class="border rounded-3 p-3 bg-light-subtle small border-primary-subtle">
+                        <div class="fw-bold text-primary mb-1 d-flex align-items-center gap-1">
+                            <i class="bi bi-info-circle-fill"></i> Hướng Dẫn Dữ Liệu Test Sandbox (Dành cho Chấm Đồ Án & Pentest):
+                        </div>
+                        <ul class="mb-0 ps-3 text-muted" style="font-size: 12px; line-height: 1.6;">
+                            <li><strong>Thẻ test VNPAY:</strong> Ngân hàng <code>NCB</code> - Số thẻ: <code>9704198526191432198</code> - Tên: <code>NGUYEN VAN A</code> - Ngày: <code>07/15</code> - OTP: <code>123456</code>.</li>
+                            <li><strong>ZaloPay / MoMo:</strong> Quét QR trên ứng dụng hoặc sử dụng nút <em>Xác nhận Demo Sandbox</em> tại trang kết quả.</li>
+                            <li><strong>COD:</strong> Tạo đơn ngay, đơn hàng tự động kích hoạt mã vận đơn 3PL GHN Express.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -194,10 +230,16 @@ if (!empty($currentUser['id'])) {
 <script>
 const subtotal = <?= (int)$subtotal ?>;
 function updateShipping(select) {
-    const fee = parseInt(select.options[select.selectedIndex].getAttribute('data-fee')) || 28000;
+    const opt = select.options[select.selectedIndex];
+    const fee = parseInt(opt.getAttribute('data-fee')) || 28000;
+    const time = opt.getAttribute('data-time') || '2 - 3 ngày';
     const grand = subtotal + fee;
     document.getElementById('displayShippingFee').innerText = fee.toLocaleString('vi-VN') + ' đ';
     document.getElementById('displayGrandTotal').innerText = grand.toLocaleString('vi-VN') + ' đ';
+    const estElem = document.getElementById('deliveryEstimate');
+    if (estElem) {
+        estElem.innerHTML = '<i class="bi bi-clock-history me-1"></i>Thời gian dự kiến: <strong>' + time + '</strong> (Kho Tổng TP.HCM)';
+    }
 }
 </script>
 

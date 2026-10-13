@@ -66,8 +66,8 @@ class Order {
         
         $sql = "SELECT o.*, s.shop_name, s.shop_slug, u.username as buyer_username 
                 FROM orders o 
-                JOIN shops s ON o.shop_id = s.id 
-                JOIN users u ON o.buyer_id = u.id 
+                LEFT JOIN shops s ON o.shop_id = s.id 
+                LEFT JOIN users u ON o.buyer_id = u.id 
                 WHERE o.id = ?";
         $params = [$id];
 

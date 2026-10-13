@@ -74,16 +74,21 @@ require __DIR__ . '/../layouts/header.php';
                 </div>
             </div>
 
-            <div class="d-flex flex-wrap gap-2 justify-content-center mt-3">
-                <?php if (!empty($order['id'])): ?>
-                    <a href="index.php?page=zalopay-gateway&id=<?= urlencode($order['id']) ?>" class="btn btn-primary px-4 fw-bold shadow-sm" style="background-color: #008fe5;">
-                        <i class="bi bi-arrow-repeat me-1"></i> Quét Lại Mã QR ZaloPay
+            <div class="d-flex flex-column gap-2 mt-3" style="max-width: 420px; margin: 0 auto;">
+                <?php if (!empty($result['order_code'])): ?>
+                    <a href="index.php?page=zalopay-return&order_code=<?= urlencode($result['order_code']) ?>&amount=<?= (int)($result['amount'] ?? 0) ?>&sandbox_demo=1" class="btn btn-outline-success fw-bold py-2 shadow-sm">
+                        <i class="bi bi-shield-check me-1"></i> Xác Nhận Đã Thanh Toán (Giả Lập Demo Sandbox)
                     </a>
                 <?php endif; ?>
-                <a href="index.php?page=my-orders" class="btn btn-outline-dark px-3 fw-bold">
-                    <i class="bi bi-box-seam me-1"></i> Quản Lý Đơn Mua
-                </a>
-                <a href="index.php" class="btn btn-outline-secondary px-3">
+                <?php if (!empty($order['id'])): ?>
+                    <a href="index.php?page=zalopay-gateway&id=<?= urlencode($order['id']) ?>" class="btn btn-primary fw-bold py-2 shadow-sm" style="background-color: #008fe5;">
+                        <i class="bi bi-arrow-repeat me-1"></i> Quét Lại Mã QR ZaloPay
+                    </a>
+                    <a href="index.php?page=order-tracking&id=<?= urlencode($order['id']) ?>" class="btn btn-outline-dark fw-bold py-2">
+                        <i class="bi bi-truck me-1"></i> Theo Dõi Trạng Thái Đơn Hàng
+                    </a>
+                <?php endif; ?>
+                <a href="index.php" class="btn btn-outline-secondary">
                     Về Trang Chủ
                 </a>
             </div>

@@ -49,7 +49,12 @@ class CheckoutController {
                 $buyerId = $currentUser ? $currentUser['id'] : 'usr-buyer-001';
 
                 $carrier = trim($_POST['shipping_carrier'] ?? 'GHN Express - Tiêu Chuẩn');
-                $shippingFee = (strpos($carrier, 'TP.HCM') !== false) ? 22000 : 28000;
+                $shippingFee = 28000;
+                if (strpos($carrier, 'Hỏa Tốc') !== false || strpos($carrier, 'TP.HCM') !== false) {
+                    $shippingFee = 22000;
+                } elseif (strpos($carrier, 'Tiết Kiệm') !== false) {
+                    $shippingFee = 18000;
+                }
 
                 $paymentStatus = 'PENDING';
                 if ($payment === 'TOKENIZATION_CARD') {
@@ -65,7 +70,7 @@ class CheckoutController {
                     'id'                 => $orderId,
                     'order_code'         => $orderCode,
                     'buyer_id'           => $buyerId,
-                    'shop_id'            => $shopId,
+                    'shop_id'            => $shopId ?: 'shp-tech-001',
                     'customer_name'      => $name,
                     'phone'              => $phone,
                     'address'            => $address,
@@ -121,7 +126,13 @@ class CheckoutController {
                                 exit;
                             }
                         }
-                        header("Location: index.php?page=order-tracking&id=" . $orderId . "&msg=success");
+                        if ($payment === 'COD') {
+                            header("Location: index.php?page=order-tracking&id=" . $orderId . "&msg=success");
+                            exit;
+                        }
+
+                        // Nếu chọn cổng thanh toán online nhưng API đối tác bảo trì / không phản hồi, mở cổng quét QR dự phòng
+                        header("Location: index.php?page=zalopay-gateway&id=" . $orderId . "&msg=fallback");
                         exit;
                     } else {
                         $error = 'Đã có lỗi xảy ra trong quá trình khởi tạo đơn hàng. Vui lòng thử lại!';

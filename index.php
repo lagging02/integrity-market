@@ -117,6 +117,14 @@ switch ($page) {
         (new \App\Controllers\OrderController())->tracking();
         break;
 
+    case 'simulate-delivery':
+        (new \App\Controllers\OrderController())->simulateDelivery();
+        break;
+
+    case 'retry-payment':
+        (new \App\Controllers\OrderController())->retryPayment();
+        break;
+
     case 'my-orders':
         (new \App\Controllers\OrderController())->myOrders();
         break;

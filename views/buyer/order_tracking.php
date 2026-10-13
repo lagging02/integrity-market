@@ -51,7 +51,7 @@ if (!empty($order)) {
 ?>
 
 <div class="container my-5" style="max-width: 950px;">
-    <!-- NẾU CÓ THÔNG BÁO TỪ CỔNG THANH TOÁN -->
+    <!-- NẾU CÓ THÔNG BÁO TỪ CỔNG THANH TOÁN HOẶC ĐIỀU PHỐI -->
     <?php if (isset($_GET['msg']) && $_GET['msg'] === 'paid'): ?>
         <div class="alert alert-success alert-dismissible fade show d-flex align-items-center mb-4 shadow-sm rounded-3 border-success-subtle" role="alert">
             <i class="bi bi-patch-check-fill fs-2 me-3 text-success"></i>
@@ -67,6 +67,24 @@ if (!empty($order)) {
             <div>
                 <strong class="fs-6">Đặt hàng thành công!</strong>
                 <div class="small text-success-emphasis">Cảm ơn bạn đã mua hàng tại IntegrityMarket. Đơn hàng đã được gửi tới người bán để chuẩn bị đóng gói.</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <?php elseif (isset($_GET['msg']) && $_GET['msg'] === 'status_updated'): ?>
+        <div class="alert alert-info alert-dismissible fade show d-flex align-items-center mb-4 shadow-sm rounded-3 border-info-subtle" role="alert">
+            <i class="bi bi-truck fs-2 me-3 text-info"></i>
+            <div>
+                <strong class="fs-6">Đã cập nhật trạng thái vận đơn GHN Express!</strong>
+                <div class="small text-info-emphasis">Sự kiện điều phối đã được đồng bộ vào nhật ký bưu kiện theo thời gian thực.</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <?php elseif (isset($_GET['msg']) && $_GET['msg'] === 'cod_switched'): ?>
+        <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center mb-4 shadow-sm rounded-3 border-warning-subtle" role="alert">
+            <i class="bi bi-cash-stack fs-2 me-3 text-warning"></i>
+            <div>
+                <strong class="fs-6">Đã chuyển phương thức sang Tiền mặt khi nhận hàng (COD)!</strong>
+                <div class="small text-warning-emphasis">Bạn sẽ thanh toán trực tiếp cho bưu tá GHN sau khi đồng kiểm hàng hóa tại nhà.</div>
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
@@ -175,12 +193,102 @@ if (!empty($order)) {
                         <div>
                             <?php if ($order['payment_status'] === 'PAID'): ?>
                                 <span class="badge bg-success"><i class="bi bi-check-circle-fill me-1"></i>ĐÃ THANH TOÁN (<?= htmlspecialchars($order['payment_method']) ?>)</span>
-                            <?php else: ?>
+                            <?php elseif ($order['payment_method'] === 'COD'): ?>
                                 <span class="badge bg-warning text-dark"><i class="bi bi-cash me-1"></i>CHỜ THU TIỀN KHI GIAO (COD)</span>
+                            <?php else: ?>
+                                <span class="badge bg-danger"><i class="bi bi-exclamation-circle-fill me-1"></i>CHỜ THANH TOÁN (<?= htmlspecialchars($order['payment_method']) ?>)</span>
                             <?php endif; ?>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- KHỐI XỬ LÝ THANH TOÁN CHO ĐƠN CHỜ THANH TOÁN ONLINE -->
+        <?php if ($order['payment_status'] !== 'PAID' && $order['payment_method'] !== 'COD'): ?>
+            <div class="card border-danger border-opacity-50 shadow-sm rounded-4 bg-white p-4 mb-4">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-danger bg-opacity-10 text-danger rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 52px; height: 52px; min-width: 52px;">
+                            <i class="bi bi-clock-history fs-3"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-danger mb-1">Đơn Hàng Chưa Được Thanh Toán (Kênh: <?= htmlspecialchars($order['payment_method']) ?>)</h6>
+                            <p class="text-muted small mb-0">Hệ thống đang chờ giao dịch được hoàn tất để tiến hành đóng gói và giao cho GHN Express.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <?php if ($order['payment_method'] === 'ZALOPAY'): ?>
+                            <a href="index.php?page=zalopay-gateway&id=<?= urlencode($order['id']) ?>" class="btn btn-primary fw-bold btn-sm py-2 px-3 shadow-sm" style="background-color: #008fe5; border-color: #008fe5;">
+                                <i class="bi bi-qr-code-scan me-1"></i> Quét Lại Mã ZaloPay
+                            </a>
+                        <?php else: ?>
+                            <a href="index.php?page=retry-payment&id=<?= urlencode($order['id']) ?>&method=<?= urlencode($order['payment_method']) ?>" class="btn btn-primary fw-bold btn-sm py-2 px-3 shadow-sm">
+                                <i class="bi bi-arrow-repeat me-1"></i> Thanh Toán Lại Qua <?= htmlspecialchars($order['payment_method']) ?>
+                            </a>
+                        <?php endif; ?>
+
+                        <?php
+                        $demoUrl = '';
+                        if ($order['payment_method'] === 'VNPAY') {
+                            $demoUrl = 'index.php?page=vnpay-return&order_code=' . urlencode($order['order_code']) . '&amount=' . urlencode($order['total_amount']) . '&sandbox_demo=1';
+                        } elseif ($order['payment_method'] === 'MOMO') {
+                            $demoUrl = 'index.php?page=momo-return&order_code=' . urlencode($order['order_code']) . '&amount=' . urlencode($order['total_amount']) . '&sandbox_demo=1';
+                        } elseif ($order['payment_method'] === 'ZALOPAY') {
+                            $demoUrl = 'index.php?page=zalopay-return&order_code=' . urlencode($order['order_code']) . '&amount=' . urlencode($order['total_amount']) . '&sandbox_demo=1';
+                        } elseif ($order['payment_method'] === 'PAYPAL') {
+                            $demoUrl = 'index.php?page=paypal-return&order_code=' . urlencode($order['order_code']) . '&sandbox_demo=1';
+                        }
+                        ?>
+                        <?php if ($demoUrl): ?>
+                            <a href="<?= $demoUrl ?>" class="btn btn-outline-success fw-bold btn-sm py-2 px-3 shadow-sm">
+                                <i class="bi bi-shield-check me-1"></i> Xác Nhận Test Sandbox (1-Click)
+                            </a>
+                        <?php endif; ?>
+
+                        <a href="index.php?page=retry-payment&id=<?= urlencode($order['id']) ?>&method=COD" class="btn btn-outline-secondary fw-bold btn-sm py-2 px-3" onclick="return confirm('Bạn có chắc muốn chuyển hình thức sang Thanh toán khi nhận hàng (COD)?');">
+                            <i class="bi bi-cash me-1"></i> Chuyển Sang COD
+                        </a>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <!-- BẢNG ĐIỀU KHIỂN MÔ PHỎNG VẬN CHUYỂN 3PL GHN (DÀNH CHO CHẤM ĐỒ ÁN & KIỂM THỬ) -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white p-4 mb-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-2 pb-2 border-bottom">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-primary px-2 py-1"><i class="bi bi-cpu me-1"></i>3PL SIMULATOR</span>
+                    <h6 class="fw-bold text-dark mb-0">Mô Phỏng Tiến Trình Vận Chuyển 3PL GHN Express</h6>
+                </div>
+                <div class="small">
+                    Trạng thái hiện tại: <span class="badge bg-secondary font-monospace"><?= htmlspecialchars($order['fulfillment_status']) ?></span>
+                </div>
+            </div>
+            <p class="small text-muted mb-3">
+                Nhấn các nút bên dưới để mô phỏng Webhook chuyển trạng thái bưu kiện theo vòng đời 3PL (State Machine):
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="index.php?page=simulate-delivery&id=<?= urlencode($order['id']) ?>&status=READY_TO_PICK&location=Kho+Tổng+TP.+Hồ+Chí+Minh" 
+                   class="btn btn-sm <?= $order['fulfillment_status'] === 'READY_TO_PICK' ? 'btn-info text-white' : 'btn-outline-info' ?> fw-semibold">
+                    <i class="bi bi-upc-scan me-1"></i> 1. Đã Đóng Gói & In Tem
+                </a>
+                <a href="index.php?page=simulate-delivery&id=<?= urlencode($order['id']) ?>&status=PICKING&location=Bưu+cục+GHN+Quận+1" 
+                   class="btn btn-sm <?= $order['fulfillment_status'] === 'PICKING' ? 'btn-primary' : 'btn-outline-primary' ?> fw-semibold">
+                    <i class="bi bi-box-arrow-in-up me-1"></i> 2. Bưu Tá Tiếp Nhận
+                </a>
+                <a href="index.php?page=simulate-delivery&id=<?= urlencode($order['id']) ?>&status=IN_TRANSIT&location=Kho+Trung+Chuyển+Bắc+Nam+GHN" 
+                   class="btn btn-sm <?= $order['fulfillment_status'] === 'IN_TRANSIT' ? 'btn-primary' : 'btn-outline-primary' ?> fw-semibold">
+                    <i class="bi bi-truck me-1"></i> 3. Luân Chuyển Kho Trung Chuyển
+                </a>
+                <a href="index.php?page=simulate-delivery&id=<?= urlencode($order['id']) ?>&status=OUT_FOR_DELIVERY&location=Bưu+cục+phát+khu+vực+người+nhận" 
+                   class="btn btn-sm <?= $order['fulfillment_status'] === 'OUT_FOR_DELIVERY' ? 'btn-warning text-dark' : 'btn-outline-warning text-dark' ?> fw-semibold">
+                    <i class="bi bi-bicycle me-1"></i> 4. Đang Giao Đến Khách
+                </a>
+                <a href="index.php?page=simulate-delivery&id=<?= urlencode($order['id']) ?>&status=DELIVERED&location=Địa+chỉ+người+nhận" 
+                   class="btn btn-sm <?= $order['fulfillment_status'] === 'DELIVERED' ? 'btn-success' : 'btn-outline-success' ?> fw-semibold">
+                    <i class="bi bi-check-circle-fill me-1"></i> 5. Giao Thành Công & Ký Nhận
+                </a>
             </div>
         </div>
 

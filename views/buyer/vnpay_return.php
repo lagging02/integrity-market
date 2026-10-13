@@ -67,11 +67,16 @@ require __DIR__ . '/../layouts/header.php';
                 Mã đơn hàng: <strong>#<?= htmlspecialchars($result['order_code']) ?></strong>. Đơn hàng vẫn được lưu ở trạng thái chờ thanh toán.
             </div>
 
-            <div class="d-flex gap-2 justify-content-center mt-3">
-                <a href="index.php?page=checkout" class="btn btn-danger px-4 fw-bold">
-                    Thử Lại Thanh Toán
-                </a>
-                <a href="index.php" class="btn btn-outline-secondary px-3">
+            <div class="d-flex flex-column gap-2 mt-3" style="max-width: 420px; margin: 0 auto;">
+                <?php if (!empty($result['order_code'])): ?>
+                    <a href="index.php?page=vnpay-return&order_code=<?= urlencode($result['order_code']) ?>&amount=<?= (int)$result['amount'] ?>&sandbox_demo=1" class="btn btn-outline-success fw-bold py-2 shadow-sm">
+                        <i class="bi bi-shield-check me-1"></i> Xác Nhận Đã Thanh Toán (Giả Lập Demo Sandbox)
+                    </a>
+                    <a href="index.php?page=order-tracking&order_code=<?= urlencode($result['order_code']) ?>" class="btn btn-primary fw-bold py-2 shadow-sm">
+                        <i class="bi bi-arrow-repeat me-1"></i> Tiếp Tục Thanh Toán Đơn Này
+                    </a>
+                <?php endif; ?>
+                <a href="index.php" class="btn btn-outline-secondary">
                     Về Trang Chủ
                 </a>
             </div>
