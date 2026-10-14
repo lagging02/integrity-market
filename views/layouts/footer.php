@@ -40,13 +40,13 @@
 
             <div class="col-lg-3 col-md-6">
                 <h6 class="fw-bold mb-3 text-dark">Phương Thức Thanh Toán & Vận Chuyển</h6>
-                <div class="d-flex flex-wrap gap-2">
-                    <img src="assets/images/vnpay.svg" alt="VNPAY" style="height: 32px;" class="shadow-sm rounded border bg-white p-1">
-                    <img src="assets/images/zalopay.svg" alt="ZaloPay" style="height: 32px;" class="shadow-sm rounded border bg-white p-1">
-                    <img src="assets/images/momo.svg" alt="MoMo" style="height: 32px;" class="shadow-sm rounded border bg-white p-1">
-                    <img src="assets/images/paypal.svg" alt="PayPal" style="height: 32px;" class="shadow-sm rounded border bg-white p-1">
-                    <img src="assets/images/ghn.svg" alt="GHN Express" style="height: 32px;" class="shadow-sm rounded border bg-white p-1">
-                    <img src="assets/images/cod.svg" alt="COD" style="height: 32px;" class="shadow-sm rounded border bg-white p-1">
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    <img src="assets/images/vnpay.png" alt="VNPAY" style="height: 32px; width: auto; max-width: 65px; object-fit: contain;" class="shadow-sm rounded border bg-white p-1" title="Cổng VNPAY">
+                    <img src="assets/images/zalopay.png" alt="ZaloPay" style="height: 32px; width: auto; max-width: 65px; object-fit: contain;" class="shadow-sm rounded border bg-white p-1" title="Ví ZaloPay">
+                    <img src="assets/images/momo.svg" alt="MoMo" style="height: 32px; width: auto; max-width: 65px; object-fit: contain;" class="shadow-sm rounded border bg-white p-1" title="Ví MoMo">
+                    <img src="assets/images/paypal.png" alt="PayPal" style="height: 32px; width: auto; max-width: 75px; object-fit: contain;" class="shadow-sm rounded border bg-white p-1" title="Cổng Quốc Tế PayPal">
+                    <img src="assets/images/ghn.svg" alt="GHN Express" style="height: 32px; width: auto; max-width: 65px; object-fit: contain;" class="shadow-sm rounded border bg-white p-1" title="Vận chuyển GHN Express">
+                    <img src="assets/images/cod.svg" alt="COD" style="height: 32px; width: auto; max-width: 65px; object-fit: contain;" class="shadow-sm rounded border bg-white p-1" title="Thanh toán COD khi nhận hàng">
                 </div>
                 <div class="mt-2 text-muted" style="font-size: 11px;">
                     <i class="bi bi-shield-check text-success me-1"></i>Mã hóa TLS 1.3 & Bảo mật Tokenization chuẩn quốc tế.
