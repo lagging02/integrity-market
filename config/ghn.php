@@ -6,7 +6,7 @@
 return [
     // Bật true = Môi trường thử nghiệm Staging (https://dev-online-gateway.ghn.vn)
     // Bật false = Môi trường vận hành thực tế Production (https://online-gateway.ghn.vn)
-    'sandbox'         => false,
+    'sandbox'         => true,
     'dev_api_url'     => 'https://dev-online-gateway.ghn.vn/shiip/public-api/',
     'prod_api_url'    => 'https://online-gateway.ghn.vn/shiip/public-api/',
     'client_id'       => 5573761,
