@@ -17,10 +17,10 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- Chúng ta dùng chuỗi Bcrypt chuẩn sinh từ PHP:
 -- $2y$12$K1A8rD0T9.jHqE1rP8i9Oe2hB5gV0wX7mY6zL4sK3jH2gF1eD0cB.
 INSERT INTO users (id, username, email, password_hash, full_name, role, phone, address) VALUES
-('usr-admin-001', 'admin', 'admin@attmdt.vn', '$2y$12$sVVqQgD1PO3dhZXlWhmA3.te.WmgFQrAAQx4a4r7mJwYG4EjIgGqm', 'Hệ Thống Quản Trị Sàn', 'ADMIN', 'ENC:Zip6UczdsOJDjtKis7b5ycxXk51xzMA9Z/XECcrw+Oc=', 'ENC:KmWd/qyGmZT2gFAuZlcJ6Av2LjrgYiXIYkKRA5Z7vdUk8vbzN6K1CTwWqITI6pcBNMufjFO46ZaPdMtP4BzkBQ=='),
-('usr-seller-001', 'tech_seller', 'seller.tech@attmdt.vn', '$2y$12$sVVqQgD1PO3dhZXlWhmA3.te.WmgFQrAAQx4a4r7mJwYG4EjIgGqm', 'Trần Văn Công Nghệ', 'SELLER', 'ENC:Zip6UczdsOJDjtKis7b5ycxXk51xzMA9Z/XECcrw+Oc=', 'ENC:KmWd/qyGmZT2gFAuZlcJ6Av2LjrgYiXIYkKRA5Z7vdUk8vbzN6K1CTwWqITI6pcBNMufjFO46ZaPdMtP4BzkBQ=='),
-('usr-seller-002', 'diy_maker', 'seller.diy@attmdt.vn', '$2y$12$sVVqQgD1PO3dhZXlWhmA3.te.WmgFQrAAQx4a4r7mJwYG4EjIgGqm', 'Lê Thị Sáng Tạo DIY', 'SELLER', 'ENC:Zip6UczdsOJDjtKis7b5ycxXk51xzMA9Z/XECcrw+Oc=', 'ENC:KmWd/qyGmZT2gFAuZlcJ6Av2LjrgYiXIYkKRA5Z7vdUk8vbzN6K1CTwWqITI6pcBNMufjFO46ZaPdMtP4BzkBQ=='),
-('usr-buyer-001', 'khachhang1', 'buyer@attmdt.vn', '$2y$12$sVVqQgD1PO3dhZXlWhmA3.te.WmgFQrAAQx4a4r7mJwYG4EjIgGqm', 'Nguyễn Thị Thu Hà', 'BUYER', 'ENC:Zip6UczdsOJDjtKis7b5ycxXk51xzMA9Z/XECcrw+Oc=', 'ENC:KmWd/qyGmZT2gFAuZlcJ6Av2LjrgYiXIYkKRA5Z7vdUk8vbzN6K1CTwWqITI6pcBNMufjFO46ZaPdMtP4BzkBQ==');
+('usr-admin-001', 'admin', 'admin@attmdt.vn', '$2y$12$kPPkY9fOeclTWTvJcONxyuB2YeD78VQAnPowGzDBiMnWK.UDxms..', 'Hệ Thống Quản Trị Sàn', 'ADMIN', 'ENC:Zip6UczdsOJDjtKis7b5ycxXk51xzMA9Z/XECcrw+Oc=', 'ENC:KmWd/qyGmZT2gFAuZlcJ6Av2LjrgYiXIYkKRA5Z7vdUk8vbzN6K1CTwWqITI6pcBNMufjFO46ZaPdMtP4BzkBQ=='),
+('usr-seller-001', 'tech_seller', 'seller.tech@attmdt.vn', '$2y$12$kPPkY9fOeclTWTvJcONxyuB2YeD78VQAnPowGzDBiMnWK.UDxms..', 'Trần Văn Công Nghệ', 'SELLER', 'ENC:Zip6UczdsOJDjtKis7b5ycxXk51xzMA9Z/XECcrw+Oc=', 'ENC:KmWd/qyGmZT2gFAuZlcJ6Av2LjrgYiXIYkKRA5Z7vdUk8vbzN6K1CTwWqITI6pcBNMufjFO46ZaPdMtP4BzkBQ=='),
+('usr-seller-002', 'diy_maker', 'seller.diy@attmdt.vn', '$2y$12$kPPkY9fOeclTWTvJcONxyuB2YeD78VQAnPowGzDBiMnWK.UDxms..', 'Lê Thị Sáng Tạo DIY', 'SELLER', 'ENC:Zip6UczdsOJDjtKis7b5ycxXk51xzMA9Z/XECcrw+Oc=', 'ENC:KmWd/qyGmZT2gFAuZlcJ6Av2LjrgYiXIYkKRA5Z7vdUk8vbzN6K1CTwWqITI6pcBNMufjFO46ZaPdMtP4BzkBQ=='),
+('usr-buyer-001', 'khachhang1', 'buyer@attmdt.vn', '$2y$12$kPPkY9fOeclTWTvJcONxyuB2YeD78VQAnPowGzDBiMnWK.UDxms..', 'Nguyễn Thị Thu Hà', 'BUYER', 'ENC:Zip6UczdsOJDjtKis7b5ycxXk51xzMA9Z/XECcrw+Oc=', 'ENC:KmWd/qyGmZT2gFAuZlcJ6Av2LjrgYiXIYkKRA5Z7vdUk8vbzN6K1CTwWqITI6pcBNMufjFO46ZaPdMtP4BzkBQ==');
 
 -- 2. NẠP SHOPS (Kênh Người Bán)
 INSERT INTO shops (id, user_id, shop_name, shop_slug, description, rating, status, avatar) VALUES
