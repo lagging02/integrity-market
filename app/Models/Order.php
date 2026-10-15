@@ -99,8 +99,9 @@ class Order {
 
     public static function getByOrderCode($orderCode) {
         $pdo = Database::getInstance();
-        $stmt = $pdo->prepare("SELECT id FROM orders WHERE order_code = ?");
-        $stmt->execute([trim($orderCode)]);
+        $code = trim($orderCode);
+        $stmt = $pdo->prepare("SELECT id FROM orders WHERE order_code = ? OR tracking_code = ?");
+        $stmt->execute([$code, $code]);
         $id = $stmt->fetchColumn();
         if ($id) {
             return self::getById($id);

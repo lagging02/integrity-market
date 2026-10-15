@@ -186,6 +186,11 @@ if (!empty($order)) {
                         <div class="d-flex align-items-center gap-2">
                             <span class="font-monospace fw-bold text-primary fs-6"><?= htmlspecialchars($order['tracking_code'] ?? ('GHN-' . strtoupper(substr(md5($order['id']), 0, 9)))) ?></span>
                             <button class="btn btn-sm btn-outline-secondary py-0 px-2" onclick="navigator.clipboard.writeText('<?= htmlspecialchars($order['tracking_code'] ?? ('GHN-' . strtoupper(substr(md5($order['id']), 0, 9)))) ?>'); alert('Đã sao chép mã vận đơn!');">Copy</button>
+                            <?php if (!empty($order['tracking_code'])): ?>
+                                <a href="https://tracking.ghn.vn/?order_code=<?= urlencode($order['tracking_code']) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary py-0 px-2" title="Tra cứu trực tiếp trên Cổng GHN Express">
+                                    <i class="bi bi-box-arrow-up-right me-1"></i>GHN Portal
+                                </a>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -396,13 +401,13 @@ if (!empty($order)) {
             <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center p-3 mb-3 mx-auto" style="width: 80px; height: 80px;">
                 <i class="bi bi-truck fs-1"></i>
             </div>
-            <h3 class="fw-extrabold text-dark mb-2">Tra Cứu Trạng Thái Đơn Hàng</h3>
-            <p class="text-muted small mb-4">Nhập mã đơn hàng (được cấp khi bạn đặt hàng hoặc gửi qua email) để kiểm tra tiến trình đóng gói và vận chuyển theo thời gian thực.</p>
+            <h3 class="fw-extrabold text-dark mb-2">Tra Cứu Trạng Thái Đơn Hàng & Vận Đơn 3PL</h3>
+            <p class="text-muted small mb-4">Nhập mã đơn hàng Sàn (<code>ORD-...</code>) hoặc Mã vận đơn GHN Express (<code>GHN...</code>) để kiểm tra tiến trình đóng gói và vận chuyển thời gian thực.</p>
 
             <form action="index.php?page=order-tracking" method="POST" class="mb-3">
                 <div class="input-group input-group-lg shadow-sm rounded-3 overflow-hidden mb-3">
                     <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
-                    <input type="text" name="order_code" class="form-control border-start-0 font-monospace text-uppercase" placeholder="Ví dụ: ORD-20261013-XXXXX" required autofocus>
+                    <input type="text" name="order_code" class="form-control border-start-0 font-monospace text-uppercase" placeholder="Ví dụ: ORD-20261015-XXXXX hoặc GHN12345678VN" required autofocus>
                     <button class="btn btn-primary px-4 fw-bold" type="submit">Tra Cứu</button>
                 </div>
             </form>
