@@ -103,17 +103,6 @@ $activeOtp = \App\Services\OtpService::getActiveSimulation();
                         </div>
                     </div>
 
-                    <div class="p-2 bg-light border rounded-3 mb-3 small">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="text-muted fw-bold"><i class="bi bi-shield-check text-primary me-1"></i>Tài khoản Demo (Pass: <code>Password@123</code>):</span>
-                        </div>
-                        <div class="d-flex flex-wrap gap-1 mt-1">
-                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle" role="button" onclick="document.querySelector('[name=username]').value='admin'; document.getElementById('loginPasswordInput').value='Password@123';">Admin: admin</span>
-                            <span class="badge bg-success-subtle text-success border border-success-subtle" role="button" onclick="document.querySelector('[name=username]').value='tech_seller'; document.getElementById('loginPasswordInput').value='Password@123';">Seller: tech_seller</span>
-                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle" role="button" onclick="document.querySelector('[name=username]').value='khachhang1'; document.getElementById('loginPasswordInput').value='Password@123';">Buyer: khachhang1</span>
-                        </div>
-                    </div>
-
                     <div class="form-check mb-4 small">
                         <input class="form-check-input" type="checkbox" id="rememberMe">
                         <label class="form-check-label text-muted" for="rememberMe">
