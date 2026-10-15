@@ -213,4 +213,70 @@ class OrderController {
         header("Location: index.php?page=order-tracking&id=" . urlencode($orderId));
         exit;
     }
+
+    /**
+     * Endpoint nhận Webhook tự động từ đối tác 3PL GHN Express
+     * Route: index.php?page=ghn-webhook
+     */
+    public function ghnWebhook() {
+        header('Content-Type: application/json');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'error' => 'Phương thức không được hỗ trợ (Chỉ chấp nhận POST)'], JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+
+        $raw = file_get_contents('php://input');
+        $data = json_decode($raw, true);
+
+        if (!$data || (empty($data['OrderCode']) && empty($data['order_code']))) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Dữ liệu Webhook GHN không hợp lệ (Missing OrderCode)'], JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+
+        $trackingCode = trim($data['OrderCode'] ?? $data['order_code'] ?? '');
+        $ghnStatus = strtolower(trim($data['Status'] ?? $data['status'] ?? 'delivering'));
+        $location = $data['Warehouse'] ?? $data['Location'] ?? $data['location'] ?? 'Bưu cục trung chuyển GHN Express';
+
+        // Ánh xạ trạng thái chuẩn từ GHN Express sang State Machine của sàn
+        $statusMap = [
+            'ready_to_pick' => 'READY_TO_PICK',
+            'picking'       => 'PICKING',
+            'storing'       => 'IN_TRANSIT',
+            'transporting'  => 'IN_TRANSIT',
+            'delivering'    => 'OUT_FOR_DELIVERY',
+            'delivered'     => 'DELIVERED',
+            'delivery_fail' => 'DELIVERY_FAILED',
+            'return'        => 'RETURNED',
+            'cancel'        => 'DELIVERY_FAILED'
+        ];
+
+        $systemStatus = $statusMap[$ghnStatus] ?? 'IN_TRANSIT';
+
+        $pdo = Database::getInstance();
+        $stmt = $pdo->prepare("SELECT id FROM orders WHERE tracking_code = ? OR order_code = ?");
+        $stmt->execute([$trackingCode, $trackingCode]);
+        $order = $stmt->fetch();
+
+        if (!$order) {
+            http_response_code(404);
+            echo json_encode(['success' => false, 'error' => "Không tìm thấy đơn hàng với mã [{$trackingCode}] trên hệ thống CSDL"], JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+
+        LogisticsService::updateStatus($order['id'], $systemStatus, $location);
+
+        echo json_encode([
+            'success'       => true,
+            'message'       => 'Webhook GHN 3PL đã được xử lý và ghi nhận thành công!',
+            'order_id'      => $order['id'],
+            'tracking_code' => $trackingCode,
+            'status'        => $systemStatus,
+            'location'      => $location,
+            'timestamp'     => date('Y-m-d H:i:s')
+        ], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
 }

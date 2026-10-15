@@ -121,6 +121,10 @@ switch ($page) {
         (new \App\Controllers\OrderController())->simulateDelivery();
         break;
 
+    case 'ghn-webhook':
+        (new \App\Controllers\OrderController())->ghnWebhook();
+        break;
+
     case 'retry-payment':
         (new \App\Controllers\OrderController())->retryPayment();
         break;
